@@ -1,0 +1,714 @@
+domain
+context  
+string connection
+
+Create the dbcontext and  I need the  migrations
+so in sql server the table will be created automatically
+
+
+The ADMINISTRATOR: operations
+GetAllRestaurant
+Add Restaurant= \Add DTO a 
+AddRestaurantRequest=name,location GetRes-
+rantResponse=Print the id,name and the location of the 
+restaurant
+Edit/update Restaurant
+Add Menu To Restaurant
+Edit Menu
+
+The WORKER:
+Add Customer
+Add Order
+Finish Order(The bill/Payment)
+
+1.)DBCONTEXT is a layer that repsent connection to db
+2.)REPOSITORIES=WILL HAVE STANDARD OPERATION
+GetAll,GetById,Add,Update and Delete
+
+
+2021222324
+ 
+The SERVICE will DEPENDecies ON REPOSITORY 
+1.ADMINISTRATOR=RESTAURANT REPOSITORY,MENUITEM,
+2.WORKER=Customer repository,Order repository 
+
+I want that the result of the addrestaurant dto 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ public void AddMenuItem(MenuItem menuItem)
+    {
+        _menuItemRepository.AddMenuItem(menuItem);
+    }
+
+
+
+public void UpdateMenuItem(MenuItem menuItem)
+    {
+        _menuItemRepository.UpdateMenuItem(menuItem);
+    }
+
+
+
+
+
+
+
+  public void UpdateRestaurant(Restaurant restaurant)
+    {
+        _restaurantRepository.UpdateRestaurant(restaurant);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class WorkerService
+{
+    private readonly CustomerRepository _customerRepository;
+    private readonly OrderRepository _orderRepository;
+
+    public WorkerService(CustomerRepository customerRepository, OrderRepository orderRepository)
+    {
+        _customerRepository = customerRepository;
+        _orderRepository = orderRepository;
+    }
+
+    // Customer Operations
+    public List<Customer> GetAllCustomers()
+    {
+        return _customerRepository.GetAllCustomer();
+    }
+
+    public Customer? GetCustomerById(int id)
+    {
+        return _customerRepository.GetCustomerById(id);
+    }
+
+    public void AddCustomer(Customer customer)
+    {
+        _customerRepository.AddCustomer(customer);
+    }
+
+    public void UpdateCustomer(Customer customer)
+    {
+        _customerRepository.UpdateCustomer(customer);
+    }
+
+    public void DeleteCustomer(int id)
+    {
+        _customerRepository.DeleteCustomer(id);
+    }
+
+    // Order Operations
+    public List<Order> GetAllOrders()
+    {
+        return _orderRepository.GetAllOrder();
+    }
+
+    public Order? GetOrderById(int id)
+    {
+        return _orderRepository.GetOrderById(id);
+    }
+
+    public void AddOrder(Order order)
+    {
+        _orderRepository.AddOrder(order);
+    }
+
+    public void UpdateOrder(Order order)
+    {
+        _orderRepository.UpdateOrder(order);
+    }
+
+    public void DeleteOrder(int id)
+    {
+        _orderRepository.DeleteOrder(id);
+    }
+
+    public void FinishOrder(int id)
+    {
+        var order = _orderRepository.GetOrderById(id);
+        if (order != null)
+        {
+            // Perform finishing operations like setting status, calculating bill, etc.
+            _orderRepository.UpdateOrder(order);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class AdministratorController : ControllerBase
+{
+    private readonly AdministratorService _administratorService;
+
+    public AdministratorController(AdministratorService administratorService)
+    {
+        _administratorService = administratorService;
+    }
+
+    // Restaurant endpoints
+    [HttpGet("restaurants")]
+    public ActionResult<List<Restaurant>> GetAllRestaurants()
+    {
+        return _administratorService.GetAllRestaurants();
+    }
+
+    [HttpGet("restaurants/{id}")]
+    public ActionResult<Restaurant> GetRestaurantById(int id)
+    {
+        var restaurant = _administratorService.GetRestaurantById(id);
+        if (restaurant == null)
+        {
+            return NotFound();
+        }
+        return restaurant;
+    }
+
+    [HttpPost("restaurants")]
+    public ActionResult AddRestaurant(Restaurant restaurant)
+    {
+        _administratorService.AddRestaurant(restaurant);
+        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurant.Id }, restaurant);
+    }
+
+    [HttpPut("restaurants/{id}")]
+    public ActionResult UpdateRestaurant(int id, Restaurant restaurant)
+    {
+        if (id != restaurant.Id)
+        {
+            return BadRequest();
+        }
+        _administratorService.UpdateRestaurant(restaurant);
+        return NoContent();
+    }
+
+    [HttpDelete("restaurants/{id}")]
+    public ActionResult DeleteRestaurant(int id)
+    {
+        _administratorService.DeleteRestaurant(id);
+        return NoContent();
+    }
+
+    // MenuItem endpoints
+    [HttpGet("menuitems")]
+    public ActionResult<List<MenuItem>> GetAllMenuItems()
+    {
+        return _administratorService.GetAllMenuItems();
+    }
+
+    [HttpGet("menuitems/{id}")]
+    public ActionResult<MenuItem> GetMenuItemById(int id)
+    {
+        var menuItem = _administratorService.GetMenuItemById(id);
+        if (menuItem == null)
+        {
+            return NotFound();
+        }
+        return menuItem;
+    }
+
+    [HttpPost("menuitems")]
+    public ActionResult AddMenuItem(MenuItem menuItem)
+    {
+        _administratorService.AddMenuItem(menuItem);
+        return CreatedAtAction(nameof(GetMenuItemById), new { id = menuItem.Id }, menuItem);
+    }
+
+    [HttpPut("menuitems/{id}")]
+    public ActionResult UpdateMenuItem(int id, MenuItem menuItem)
+    {
+        if (id != menuItem.Id)
+        {
+            return BadRequest();
+        }
+        _administratorService.UpdateMenuItem(menuItem);
+        return NoContent();
+    }
+
+    [HttpDelete("menuitems/{id}")]
+    public ActionResult DeleteMenuItem(int id)
+    {
+        _administratorService.DeleteMenuItem(id);
+        return NoContent();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class WorkerController : ControllerBase
+{
+    private readonly WorkerService _workerService;
+
+    public WorkerController(WorkerService workerService)
+    {
+        _workerService = workerService;
+    }
+
+    // Customer endpoints
+    [HttpGet("customers")]
+    public ActionResult<List<Customer>> GetAllCustomers()
+    {
+        return _workerService.GetAllCustomers();
+    }
+
+    [HttpGet("customers/{id}")]
+    public ActionResult<Customer> GetCustomerById(int id)
+    {
+        var customer = _workerService.GetCustomerById(id);
+        if (customer == null)
+        {
+            return NotFound();
+        }
+        return customer;
+    }
+
+    [HttpPost("customers")]
+    public ActionResult AddCustomer(Customer customer)
+    {
+        _workerService.AddCustomer(customer);
+        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
+    }
+
+    [HttpPut("customers/{id}")]
+    public ActionResult UpdateCustomer(int id, Customer customer)
+    {
+        if (id != customer.Id)
+        {
+            return BadRequest();
+        }
+        _workerService.UpdateCustomer(customer);
+        return NoContent();
+    }
+
+    [HttpDelete("customers/{id}")]
+    public ActionResult DeleteCustomer(int id)
+    {
+        _workerService.DeleteCustomer(id);
+        return NoContent();
+    }
+
+    // Order endpoints
+    [HttpGet("orders")]
+    public ActionResult<List<Order>> GetAllOrders()
+    {
+        return _workerService.GetAllOrders();
+    }
+
+    [HttpGet("orders/{id}")]
+    public ActionResult<Order> GetOrderById(int id)
+    {
+        var order = _workerService.GetOrderById(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+        return order;
+    }
+
+    [HttpPost("orders")]
+    public ActionResult AddOrder(Order order)
+    {
+        _workerService.AddOrder(order);
+        return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+    }
+
+    [HttpPut("orders/{id}/finish")]
+    public ActionResult FinishOrder(int id)
+    {
+        _workerService.FinishOrder(id);
+        return NoContent();
+    }
+
+    [HttpPut("orders/{id}")]
+    public ActionResult UpdateOrder(int id, Order order)
+    {
+        if (id != order.Id)
+        {
+            return BadRequest();
+        }
+        _workerService.UpdateOrder(order);
+        return NoContent();
+    }
+
+    [HttpDelete("orders/{id}")]
+    public ActionResult DeleteOrder(int id)
+    {
+        _workerService.DeleteOrder(id);
+        return NoContent();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+help me to finish my project on solution explorer web api aboutr the restaurant this is the information I have this model 5
+  public class Customer
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+    }
+
+   public class MenuItem
+    {
+        public int Id { get; set; }
+        public int RestaurantId { get; set; }
+        public string NameOfThePizza { get; set; }
+        public decimal Price { get; set; }
+
+    }
+
+ public class Order
+    {
+          public int Id { get; set; }
+          public int Date { get; set; }
+          public string? Waiter { get; set; }
+          public int   CustomerId { get; set; }
+          public string Table { get; set;}
+          
+    }
+
+    public class OrderDetail
+    {
+        public int Id { get; set; }  
+        public int MenuItemId { get; set; }
+        public int Quantity { get; set; }
+        public int OrderId { get; set; }
+
+    }
+
+public class Restaurant
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Location { get; set; }
+    }
+i have 5 repositories
+ public class CustomerRepository
+    {
+        private readonly RestaurantDbContext _context;
+
+        public CustomerRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public List<Customer> GetAllCustomer()
+        {
+            return _context.Customer.ToList();
+        }
+
+        public Customer? GetCustomerById(int id)
+        {
+            return _context.Customer.Find(id);
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            _context.Customer.Add(customer);
+            _context.SaveChanges();
+        }
+
+        public void UpdateCustomer(Customer customer)
+        {
+            _context.Entry(customer).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteCustomer(int id)
+        {
+            var customer = _context.Customer.Find(id);
+            if (customer != null)
+            {
+                _context.Customer.Remove(customer);
+                _context.SaveChanges();
+            }
+        }
+
+
+    }
+ public class MenuItemRepository
+    {
+
+        private readonly RestaurantDbContext _context;
+
+        public MenuItemRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public List<MenuItem> GetAllMenuItem()
+        {
+            return _context.MenuItem.ToList();
+        }
+
+        public MenuItem? GetMenuItemById(int id)
+        {
+            return _context.MenuItem.Find(id);
+        }
+
+        public void AddMenuItem(MenuItem menuItem)
+        {
+            _context.MenuItem.Add(menuItem);
+            _context.SaveChanges();
+        }
+
+        public void UpdateMenuItem(MenuItem menuItem)
+        {
+            _context.Entry(menuItem).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteMenuItem(int id)
+        {
+            var menuItem = _context.MenuItem.Find(id);
+            if (menuItem != null)
+            {
+                _context.MenuItem.Remove(menuItem);
+                _context.SaveChanges();
+            }
+        }
+
+
+    }
+
+  public class OrderDetailRepository
+    {
+        private readonly RestaurantDbContext _context;
+
+        public OrderDetailRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public List<OrderDetail> GetAllOrderDetail()
+        {
+            return _context.OrderDetail.ToList();
+        }
+
+        public OrderDetail? GetOrderDetailById(int id)
+        {
+            return _context.OrderDetail.Find(id);
+        }
+
+        public void AddOrderDetail(OrderDetail orderDetail)
+        {
+            _context.OrderDetail.Add(orderDetail);
+            _context.SaveChanges();
+        }
+
+        public void UpdateOrderDetail(OrderDetail orderDetail)
+        {
+            _context.Entry(orderDetail).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteOrderDetail(int id)
+        {
+            var orderDetail = _context.OrderDetail.Find(id);
+            if (orderDetail != null)
+            {
+                _context.OrderDetail.Remove(orderDetail);
+                _context.SaveChanges();
+            }
+        }
+
+
+    }
+}
+
+ public class OrderRepository
+    {
+        private readonly RestaurantDbContext _context;
+
+        public OrderRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public List<Order> GetAllOrder()
+        {
+            return _context.Order.ToList();
+        }
+
+        public Order? GetOrderById(int id)
+        {
+            return _context.Order.Find(id);
+        }
+
+        public void AddOrder(Order order)
+        {
+            _context.Order.Add(order);
+            _context.SaveChanges();
+        }
+
+        public void UpdateOrder(Order order)
+        {
+            _context.Entry(order).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteOrder(int id)
+        {
+            var order = _context.Order.Find(id);
+            if (order != null)
+            {
+                _context.Order.Remove(order);
+                _context.SaveChanges();
+            }
+        }
+
+
+    }
+}
+
+public class RestaurantRepository
+    {
+        private readonly RestaurantDbContext _context;
+
+        public RestaurantRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public List<Restaurant> GetAllRestaurant()
+        {
+            return _context.Restaurant.ToList();
+        }
+
+        public Restaurant? GetRestaurantById(int id)
+        {
+            return _context.Restaurant.Find(id);
+        }
+
+        public void AddRestaurant(Restaurant restaurant)
+        {
+            _context.Restaurant.Add(restaurant);
+            _context.SaveChanges();
+        }
+
+        public void UpdateRestaurant(Restaurant restaurant)
+        {
+            _context.Entry(restaurant).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteRestaurant(int id)
+        {
+            var restaurant = _context.Restaurant.Find(id);
+            if (restaurant != null)
+            {
+                _context.Restaurant.Remove(restaurant);
+                _context.SaveChanges();
+            }
+        }
+
+
+    }
+}
+
+   The ADMINISTRATOR: operations
+GetAllRestaurant
+Add Restaurant= \Add DTO a 
+AddRestaurantRequest=name,location GetRes-
+rantResponse=Print the id,name and the location of the 
+restaurant
+Edit/update Restaurant
+Add Menu To Restaurant
+Edit Menu
+
+The WORKER:
+Add Customer
+Add Order
+Finish Order(The bill/Payment)
+
+1.)DBCONTEXT is a layer that repsent connection to db
+2.)REPOSITORIES=WILL HAVE STANDARD OPERATION
+GetAll,GetById,Add,Update and Delete
+
