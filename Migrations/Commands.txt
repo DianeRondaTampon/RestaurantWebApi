@@ -1,0 +1,5 @@
+﻿
+EntityFrameworkCore\Add-Migration Name -Context RestaurantDbContext
+
+
+Update-Database -Context RestaurantDbContext

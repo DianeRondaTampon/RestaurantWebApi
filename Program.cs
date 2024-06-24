@@ -16,7 +16,7 @@ namespace RestaurantsWebApi
 
             // Add DbContext
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
-                         options.UseSqlServer("Server=localhost;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;"));
+                         options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;"));
 
             // Add Repositories
             builder.Services.AddScoped<CustomerRepository>();

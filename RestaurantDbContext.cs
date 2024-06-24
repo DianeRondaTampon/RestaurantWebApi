@@ -21,7 +21,7 @@ namespace RestaurantsWebApi
             if (!optionsBuilder.IsConfigured)
             {
                 // Replace "YourServer", "YourDatabase", "YourUsername", and "YourPassword" with your actual database details
-                optionsBuilder.UseSqlServer("Server=localhost;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;");
             }
 
 

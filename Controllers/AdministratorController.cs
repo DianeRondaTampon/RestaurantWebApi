@@ -20,10 +20,47 @@ namespace RestaurantsWebApi.Controllers
         [HttpGet("GetAllRestaurants")]
         public ActionResult<List<GetRestaurantResponse>> GetAllRestaurants()
         {
-            return _administratorService.GetAllRestaurants();
+            return Ok(_administratorService.GetAllRestaurants());
         }
 
-        
+        [HttpPost("Restaurant")]
+        public ActionResult<AddRestaurantResponse> AddRestaurant(AddRestaurantRequest addRestaurantRequest)
+        {
+            return Ok(_administratorService.AddRestaurant(addRestaurantRequest));
+        }
+
+        [HttpPut("Restaurant")]
+        public ActionResult<UpdateRestaurantRequest> UpdateRestaurant(UpdateRestaurantRequest updateRestaurantRequest)
+        {
+            if (_administratorService.UpdateRestaurant(updateRestaurantRequest))
+            {
+                return Ok(updateRestaurantRequest);
+            }
+            else
+            {
+                return NotFound();
+            }    
+        }
+
+        [HttpPost("MenuItem")]
+        public ActionResult<AddMenuItemResponse> AddMenuItem(AddMenuItemRequest addMenuItemRequest)
+        {
+            return Ok(_administratorService.AddMenuItem(addMenuItemRequest));
+        }
+
+
+        [HttpPut("MenuItem")]
+        public ActionResult<UpdateMenuItemRequest> UpdateMenuItem(UpdateMenuItemRequest updateMenuItemRequest)
+        {
+            if (_administratorService.UpdateMenuItem(updateMenuItemRequest))
+            {
+                return Ok(updateMenuItemRequest);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
 
     }
