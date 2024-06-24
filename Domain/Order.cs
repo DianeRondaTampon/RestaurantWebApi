@@ -2,11 +2,12 @@
 {
     public class Order
     {
-          public int Id { get; set; }
-          public string? Waiter { get; set; }
-          public int CustomerId { get; set; }
-          public string Table { get; set;}
-          public decimal Price { get; set; }
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public string? Waiter { get; set; }
+        public int CustomerId { get; set; }
+        public string Table { get; set;}
+        public decimal Price { get; set; }
 
         //Navigation Property
 

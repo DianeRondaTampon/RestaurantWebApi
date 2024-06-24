@@ -8,8 +8,5 @@
         public string Table { get; set; }
 
 
-
-
-
     }
 }

@@ -39,9 +39,7 @@ namespace RestaurantsWebApi.Application
         {
             Order order = new Order()
             {
-                //Date = addOrderRequest.Date,
-               
-
+                Date = addOrderRequest.Date,
                 Waiter = addOrderRequest.Waiter,
                 CustomerId = addOrderRequest.CustomerId,
                 Table = addOrderRequest.Table,
