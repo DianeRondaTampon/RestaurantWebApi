@@ -16,7 +16,7 @@ namespace RestaurantsWebApi
 
             // Add DbContext
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
-                         options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;"));
+                         options.UseSqlServer("Server=localhost;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;"));
 
             // Add Repositories
             builder.Services.AddScoped<CustomerRepository>();
@@ -44,7 +44,20 @@ namespace RestaurantsWebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             var app = builder.Build();
+
+            // Use CORS
+            app.UseCors("AllowAll");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
