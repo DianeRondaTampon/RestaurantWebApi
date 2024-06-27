@@ -109,18 +109,37 @@ namespace RestaurantsWebApi.Application
 
         }
 
+        public List<GetMenuResponse> GetMenu(int restaurantId)
+        {
+            List<GetMenuResponse> getMenuResponses = new List<GetMenuResponse>();
 
-        //public GetMenuRequest MenuRequest(GetMenuRequest getMenuRequest)
-       
+            List<MenuItem> menuItems = _menuItemRepository.GetAllMenuItem().Where(m => m.RestaurantId == restaurantId).ToList();
 
+            foreach (MenuItem menu in menuItems)
+            {
+                GetMenuResponse getMenuResponse = new GetMenuResponse()
+                {
+                    Id = menu.Id,
+                    Name = menu.Name,
+                    Price = menu.Price
+                };
+                getMenuResponses.Add(getMenuResponse);
+            }
 
-
-
-
-
-
+            return getMenuResponses;
         }
+
+
+
+
+
+
+
+
+
+
     }
+}
 
 
 

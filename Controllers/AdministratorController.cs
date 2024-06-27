@@ -39,7 +39,7 @@ namespace RestaurantsWebApi.Controllers
             else
             {
                 return NotFound();
-            }    
+            }
         }
 
         [HttpPost("MenuItem")]
@@ -60,6 +60,12 @@ namespace RestaurantsWebApi.Controllers
             {
                 return NotFound();
             }
+        }
+
+        [HttpGet("Menu/{restaurantId}")]
+        public ActionResult<List<GetMenuResponse>> GetMenu([FromRoute] int restaurantId)
+        {
+            return Ok(_administratorService.GetMenu(restaurantId));
         }
 
 

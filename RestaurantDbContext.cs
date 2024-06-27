@@ -18,7 +18,7 @@ namespace RestaurantsWebApi
         public DbSet<Restaurant> Restaurant { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
+        { 
 
         }
 
