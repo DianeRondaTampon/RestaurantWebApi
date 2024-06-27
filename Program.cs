@@ -12,11 +12,28 @@ namespace RestaurantsWebApi
             var builder = WebApplication.CreateBuilder(args);
 
 
+            // Determine the environment
+            var environment = builder.Environment.EnvironmentName;
+            environment ="localhost";
+
+            // Configure the application to use environment-specific appsettings.json file
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // base configuration
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true) // environment-specific configuration
+                .AddEnvironmentVariables(); // Add environment variables
+
+
             //dependency injection:
 
-            // Add DbContext
-            builder.Services.AddDbContext<RestaurantDbContext>(options =>
-                         options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Restaurant;User Id=UserRestaurant;Password=UserRestaurant;TrustServerCertificate=True;"));
+            // Register the DbContext with DI, injecting IConfiguration
+            builder.Services.AddDbContext<RestaurantDbContext>((serviceProvider, options) =>
+            {
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(connectionString);
+            });
+
 
             // Add Repositories
             builder.Services.AddScoped<CustomerRepository>();
@@ -25,6 +42,7 @@ namespace RestaurantsWebApi
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<RestaurantRepository>();
             // Add other repositories if needed
+
 
             // Add Services
             builder.Services.AddScoped<AdministratorService>();
