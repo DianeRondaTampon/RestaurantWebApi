@@ -74,7 +74,7 @@ namespace RestaurantsWebApi.Controllers
         public  ActionResult<DeleteMenuItemRequest> DeleteMenuItem([FromRoute] int id)
         {
             DeleteMenuItemRequest deleteMenuItemRequest = new DeleteMenuItemRequest() { MenuItemId = id };
-            if (_administratorService.DeleteMenuItem(deleteMenuItemRequest)== null) 
+            if (_administratorService.DeleteMenuItem(deleteMenuItemRequest) != null) 
             {
                 return Ok();
             }
