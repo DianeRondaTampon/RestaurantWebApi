@@ -2,6 +2,7 @@
 using RestaurantsWebApi.Application;
 using RestaurantsWebApi.Dto;
 using RestaurantsWebApi.Models;
+using RestaurantsWebApi.Repositories;
 
 namespace RestaurantsWebApi.Controllers
 {
@@ -68,6 +69,29 @@ namespace RestaurantsWebApi.Controllers
             return Ok(_administratorService.GetMenu(restaurantId));
         }
 
+        
+        [HttpDelete("Menu/{id}")]
+        public  ActionResult<DeleteMenuItemRequest> DeleteMenuItem([FromRoute] int id)
+        {
+            DeleteMenuItemRequest deleteMenuItemRequest = new DeleteMenuItemRequest() { MenuItemId = id };
+            if (_administratorService.DeleteMenuItem(deleteMenuItemRequest)== null) 
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
-    }
+
+      
+
+
+
+
+
+
+
+        }
 }

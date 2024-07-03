@@ -129,9 +129,27 @@ namespace RestaurantsWebApi.Application
             return getMenuResponses;
         }
 
+        public DeleteMenuItemResponse DeleteMenuItem (DeleteMenuItemRequest deleteMenuItemRequest) 
+        {      
+            MenuItem? menuItem = _menuItemRepository.GetMenuItemById(deleteMenuItemRequest.MenuItemId);
+
+             if (menuItem == null)
+            {
+                return null;
+            }
+
+            //Now I will delete the MenuItem 
+            _menuItemRepository.DeleteMenuItem(menuItem.Id);
+
+            return new DeleteMenuItemResponse()
+            {
+                DeletedMenuItemId = menuItem.Id,
+            };
+        }
 
 
-
+        
+       
 
 
 
@@ -140,6 +158,7 @@ namespace RestaurantsWebApi.Application
 
     }
 }
+
 
 
 
