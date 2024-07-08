@@ -6,7 +6,7 @@
         public string? Waiter { get; set; }
         public int CustomerId { get; set; }
         public string Table { get; set; }
-
+        public int  RestaurantId { get; set; }
 
     }
 }

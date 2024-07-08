@@ -3,3 +3,8 @@ EntityFrameworkCore\Add-Migration Name -Context RestaurantDbContext
 
 
 Update-Database -Context RestaurantDbContext
+
+
+
+
+This is for the Package Manager Console

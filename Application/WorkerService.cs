@@ -79,8 +79,8 @@ namespace RestaurantsWebApi.Application
         public List <OrderNotFinishResponse> GetOrdersNotFinish (OrderNotFinishRequest orderNotFinishRequest)
         {
 
-            /*
-            List<Order> notfinishedOrders = _orderRepository.GetAllOrder().
+
+            List<Order> notfinishedOrders = _orderRepository.GetAllOrder().Where(o => o.RestaurantId == orderNotFinishRequest.RestaurantId).Where(o => o.Price == null).ToList();
            
             OrderNotFinishResponse = notfinishedOrders.
             {
@@ -94,7 +94,7 @@ namespace RestaurantsWebApi.Application
             }).ToList();
 
             return orderNotFinishResponse;
-            */
+            
 
             return null;
 
