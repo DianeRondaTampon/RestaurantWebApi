@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Protocols;
 using RestaurantsWebApi.Application;
 using RestaurantsWebApi.Dto;
+using RestaurantsWebApi.Migrations;
 
 namespace RestaurantsWebApi.Controllers
 {
@@ -11,11 +12,13 @@ namespace RestaurantsWebApi.Controllers
     public class WorkerController : ControllerBase
     {
         private readonly WorkerService _workerService;
+        
 
         public WorkerController(WorkerService workerService)
         {
             _workerService = workerService;
         }
+
 
         [HttpPost("AddCustomer")]
 
@@ -53,11 +56,20 @@ namespace RestaurantsWebApi.Controllers
         }
 
 
-        [HttpPost("GetOrdersNotFinished")]
-
-        public ActionResult<List<OrderNotFinishResponse>> GetOrdersNotFinishByRestaurantId([FromBody] OrderNotFinishRequest orderNotFinishRequest)
+        [HttpGet("GetOrdersNotFinished/{restaurantId}")]
+        public ActionResult<List<OrderNotFinishResponse>> GetOrdersNotFinishByRestaurantId([FromRoute] int restaurantId)
         {
-            return null;
+
+            OrderNotFinishRequest orderNotFinishRequest = new OrderNotFinishRequest()
+            {
+                RestaurantId = restaurantId
+            };
+
+            List<OrderNotFinishResponse> orderNotFinishResponses = _workerService
+                .GetOrdersNotFinish(orderNotFinishRequest);               
+
+            return Ok((orderNotFinishResponses));
+
         }
 
 

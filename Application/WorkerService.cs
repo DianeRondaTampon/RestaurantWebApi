@@ -43,6 +43,7 @@ namespace RestaurantsWebApi.Application
                 Waiter = addOrderRequest.Waiter,
                 CustomerId = addOrderRequest.CustomerId,
                 Table = addOrderRequest.Table,
+                RestaurantId = addOrderRequest.RestaurantId
 
             };
             _orderRepository.AddOrder(order);
@@ -76,29 +77,33 @@ namespace RestaurantsWebApi.Application
 
         }
 
-        public List <OrderNotFinishResponse> GetOrdersNotFinish (OrderNotFinishRequest orderNotFinishRequest)
-        {
+        public List<OrderNotFinishResponse> GetOrdersNotFinish (OrderNotFinishRequest orderNotFinishRequest)
+        {  
 
+            List<Order> notFinishedOrders = _orderRepository.GetAllOrder()
+                .Where(o => o.RestaurantId == orderNotFinishRequest.RestaurantId)
+                .Where(o => o.Price == null).ToList();
 
-            List<Order> notfinishedOrders = _orderRepository.GetAllOrder().Where(o => o.RestaurantId == orderNotFinishRequest.RestaurantId).Where(o => o.Price == null).ToList();
-           
-            OrderNotFinishResponse = notfinishedOrders.
+            List<OrderNotFinishResponse> orderNotFinishResponses = new List<OrderNotFinishResponse>();
+
+            foreach (Order order in notFinishedOrders)
             {
-                Id = orderNotFinishRequest.Id,
-                Date = orderNotFinishRequest.Date,
-                Waiter = orderNotFinishRequest.Waiter,
-                CustomerId = orderNotFinishRequest.CustomerId,
-                Table = orderNotFinishRequest.Table,
-                Price = orderNotFinishRequest.Price,
+                OrderNotFinishResponse orderNotFinishResponse = new OrderNotFinishResponse()
+                {
+                    Id = order.Id,
+                    Date = order.Date,
+                    Waiter = order.Waiter,
+                    CustomerId = order.CustomerId,
+                    Table = order.Table,
+                    Price = order.Price,
+                    RestaurantId = order.RestaurantId
+                };
 
-            }).ToList();
+                orderNotFinishResponses.Add(orderNotFinishResponse);
+            }
 
-            return orderNotFinishResponse;
-            
-
-            return null;
-
-
+            return orderNotFinishResponses;
+           
         }
 
 
