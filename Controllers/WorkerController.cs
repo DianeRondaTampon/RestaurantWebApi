@@ -53,8 +53,13 @@ namespace RestaurantsWebApi.Controllers
         }
 
 
+        [HttpPost("GetOrdersNotFinished")]
 
-       
+        public ActionResult<List<OrderNotFinishResponse>> GetOrdersNotFinishByRestaurantId([FromBody] OrderNotFinishRequest orderNotFinishRequest)
+        {
+            return null;
+        }
+
 
 
 

@@ -75,7 +75,34 @@ namespace RestaurantsWebApi.Application
             return finishOrderResponse;
 
         }
-        
+
+        public List <OrderNotFinishResponse> GetOrdersNotFinish (OrderNotFinishRequest orderNotFinishRequest)
+        {
+
+            /*
+            List<Order> notfinishedOrders = _orderRepository.GetAllOrder().
+           
+            OrderNotFinishResponse = notfinishedOrders.
+            {
+                Id = orderNotFinishRequest.Id,
+                Date = orderNotFinishRequest.Date,
+                Waiter = orderNotFinishRequest.Waiter,
+                CustomerId = orderNotFinishRequest.CustomerId,
+                Table = orderNotFinishRequest.Table,
+                Price = orderNotFinishRequest.Price,
+
+            }).ToList();
+
+            return orderNotFinishResponse;
+            */
+
+            return null;
+
+
+        }
+
+
+
 
 
 

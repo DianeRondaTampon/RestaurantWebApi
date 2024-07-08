@@ -8,5 +8,6 @@
 
         //navigation property
         public virtual List<MenuItem> MenuItem { get; set; }
+        public virtual List<Order> Order { get; set; }
     }
 }

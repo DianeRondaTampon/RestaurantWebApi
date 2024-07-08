@@ -8,14 +8,13 @@
         public int CustomerId { get; set; }
         public string Table { get; set;}
         public decimal Price { get; set; }
+        public int RestaurantId { get; set; }
 
         //Navigation Property
 
         public virtual List<OrderDetail> OrderDetail { get; set; }
-
         public virtual Customer Customer { get; set; }
-
-
+        public virtual Restaurant Restaurant { get; set; }
 
     }
 }
